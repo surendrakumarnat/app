@@ -1,3 +1,1 @@
-Flask
-gunicorn
-
+Surendra , 12, 7976850122, 7976850122, ddf@fdf.dfd, other, aadhar, Surendra__BCA-2023-2025.pdf

@@ -28,13 +28,13 @@ def homework():
 
 @app.route('/8th.html')
 def admin_jobs():
-    return render_template('admin.html')
+    return render_template('8th.html')
 
 @app.route('/all.html')
 def all_jobs():
     return render_template('all.html')
 # 🔹 Route for login page
-@app.route('/admin', methods=['GET', 'POST'])
+@app.route('/admin.html', methods=['GET', 'POST'])
 def admin_login():
     error = None
     if request.method == 'POST':
@@ -42,18 +42,19 @@ def admin_login():
         password = request.form['password']
 
         if username == 'admin' and password == 'admin123':
-            # Load registrations
             entries = []
             with open('registrations.txt', 'r') as f:
                 for line in f:
                     parts = line.strip().split(',')
                     if len(parts) >= 8:
                         entries.append(parts)
-            return render_template('dashboard.html', entries=entries)
+            return render_template('dashboard.html', entries=entries)  # ✅ file needed
         else:
             error = "❌ Invalid username or password"
 
-    return render_template('admin_login.html', error=error)
+    return render_template('admin.html')
+
+
 
 
 
