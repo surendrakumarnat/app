@@ -1,40 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
-
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h2>📋 All Submissions</h2>
-    <table border="1" cellpadding="10" style="margin:auto; background:white;">
-        <thead>
-            <tr>
-                <th>Full Name</th>
-                <th>Age</th>
-                <th>Mobile</th>
-                <th>WhatsApp</th>
-                <th>Email</th>
-                <th>Education</th>
-                <th>ID Type</th>
-                <th>PDF</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entry in entries %}
-            <tr>
-                <td>{{ entry[0] }}</td>
-                <td>{{ entry[1] }}</td>
-                <td>{{ entry[2] }}</td>
-                <td>{{ entry[3] }}</td>
-                <td>{{ entry[4] }}</td>
-                <td>{{ entry[5] }}</td>
-                <td>{{ entry[6] }}</td>
-                <td>{{ entry[7] }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <br><a href="{{ url_for('index') }}">← Back to Home</a>
+  <h2>📋 All Registrations</h2>
+  <table border="1" cellpadding="10" style="margin:auto; background-color: #fff;">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Mobile</th>
+        <th>WhatsApp</th>
+        <th>Email</th>
+        <th>Education</th>
+        <th>ID Type</th>
+        <th>PDF</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in entries %}
+        <tr>
+          <td>{{ entry[0] }}</td>
+          <td>{{ entry[1] }}</td>
+          <td>{{ entry[2] }}</td>
+          <td>{{ entry[3] }}</td>
+          <td>{{ entry[4] }}</td>
+          <td>{{ entry[5] }}</td>
+          <td>{{ entry[6] }}</td>
+          <td>{{ entry[7] }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </body>
 </html>
