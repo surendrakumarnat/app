@@ -1,15 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for
+from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
+
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Ensure upload folder exists
+# Ensure the upload folder exists
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-# 🔹 Routes for static pages
+# 🔹 Static page routes
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -33,7 +35,9 @@ def admin_jobs():
 @app.route('/all.html')
 def all_jobs():
     return render_template('all.html')
-# 🔹 Route for login page
+
+
+# 🔹 Admin login
 @app.route('/admin.html', methods=['GET', 'POST'])
 def admin_login():
     error = None
@@ -48,21 +52,18 @@ def admin_login():
                     parts = line.strip().split(',')
                     if len(parts) >= 8:
                         entries.append(parts)
-            return render_template('dashboard.html', entries=entries)  # ✅ file needed
+            return render_template('dashboard.html', entries=entries)
         else:
             error = "❌ Invalid username or password"
 
-    return render_template('admin.html')
+    return render_template('admin.html', error=error)
 
 
-
-
-
-
-# 🔹 Route for form page
+# 🔹 Form page
 @app.route('/formcode.html')
 def form():
     return render_template('formcode.html')
+
 
 # 🔹 Handle form submission
 @app.route('/submit', methods=['POST'])
@@ -76,30 +77,33 @@ def submit():
     id_type = request.form['idType']
     pdf_file = request.files['rusemPdf']
 
-    # Save PDF
+    # Inside your submit() route:
     filename = ""
     if pdf_file and pdf_file.filename != "":
-        filename = f"{fullname.replace(' ', '_')}_{pdf_file.filename}"
+        safe_filename = secure_filename(pdf_file.filename)
+        filename = f"{fullname.replace(' ', '_')}_{safe_filename}"
         pdf_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         pdf_file.save(pdf_path)
 
-    # Save text data
     with open('registrations.txt', 'a') as f:
         f.write(f"{fullname}, {age}, {mobile}, {whatsapp}, {gmail}, {education}, {id_type}, {filename}\n")
 
     return render_template('formcode.html', fullname=fullname)
-    # 🔹 Delete entry and stay on dashboard
+
+
 @app.route('/delete', methods=['POST'])
 def delete_entry():
     line_to_delete = request.form['line_data']
 
+    # Read and filter entries
     with open('registrations.txt', 'r') as file:
         lines = file.readlines()
     with open('registrations.txt', 'w') as file:
         for line in lines:
-            If line.strip() != line_to_delete.strip():
+            if line.strip() != line_to_delete.strip():
                 file.write(line)
 
+    # Re-read updated entries for the dashboard
     updated_entries = []
     with open('registrations.txt', 'r') as f:
         for line in f:
@@ -107,7 +111,10 @@ def delete_entry():
             if len(parts) >= 8:
                 updated_entries.append(parts)
 
+    # Stay on dashboard page with updated entries
     return render_template('dashboard.html', entries=updated_entries)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
