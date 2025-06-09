@@ -88,6 +88,26 @@ def submit():
         f.write(f"{fullname}, {age}, {mobile}, {whatsapp}, {gmail}, {education}, {id_type}, {filename}\n")
 
     return render_template('formcode.html', fullname=fullname)
+    # 🔹 Delete entry and stay on dashboard
+@app.route('/delete', methods=['POST'])
+def delete_entry():
+    line_to_delete = request.form['line_data']
+
+    with open('registrations.txt', 'r') as file:
+        lines = file.readlines()
+    with open('registrations.txt', 'w') as file:
+        for line in lines:
+            If line.strip() != line_to_delete.strip():
+                file.write(line)
+
+    updated_entries = []
+    with open('registrations.txt', 'r') as f:
+        for line in f:
+            parts = line.strip().split(',')
+            if len(parts) >= 8:
+                updated_entries.append(parts)
+
+    return render_template('dashboard.html', entries=updated_entries)
 
 if __name__ == '__main__':
     app.run(debug=True)
