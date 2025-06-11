@@ -45,7 +45,7 @@ def admin_login():
         username = request.form['username']
         password = request.form['password']
 
-        if username == 'admin' and password == 'admin123':
+        if username == 'surendra' and password == 'love@love':
             entries = []
             with open('registrations.txt', 'r') as f:
                 for line in f:
